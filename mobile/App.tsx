@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -12,6 +12,7 @@ import {
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
 import { RootNavigator } from '@/navigation/RootNavigator';
+import { AnimatedSplashScreen } from '@/screens/Splash/AnimatedSplashScreen';
 import { WishlistProvider } from '@/store/WishlistContext';
 import { CartProvider } from '@/store/CartContext';
 
@@ -25,6 +26,7 @@ export default function App() {
     Inter_600SemiBold,
     Inter_700Bold,
   });
+  const [introVisible, setIntroVisible] = useState(true);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -41,8 +43,9 @@ export default function App() {
       <SafeAreaProvider>
         <WishlistProvider>
           <CartProvider>
-            <StatusBar style="dark" />
+            <StatusBar style={introVisible ? 'light' : 'dark'} />
             <RootNavigator />
+            {introVisible && <AnimatedSplashScreen onFinish={() => setIntroVisible(false)} />}
           </CartProvider>
         </WishlistProvider>
       </SafeAreaProvider>
