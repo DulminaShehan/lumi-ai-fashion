@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -10,4 +8,182 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// ---------- Enums ----------
+
+enum Gender {
+  MEN
+  WOMEN
+  UNISEX
+}
+
+enum SkinTone {
+  FAIR
+  LIGHT
+  MEDIUM
+  OLIVE
+  TAN
+  DEEP
+}
+
+enum BodyType {
+  RECTANGLE
+  HOURGLASS
+  PEAR
+  INVERTED_TRIANGLE
+  APPLE
+  ATHLETIC
+}
+
+enum FashionStyle {
+  CASUAL
+  FORMAL
+  STREETWEAR
+  MINIMALIST
+  BOHEMIAN
+  CLASSIC
+  SPORTY
+  VINTAGE
+}
+
+enum Occasion {
+  CASUAL
+  WORK
+  FORMAL
+  PARTY
+  WEDDING
+  VACATION
+  SPORT
+  DATE_NIGHT
+}
+
+enum BudgetTier {
+  BUDGET
+  MID_RANGE
+  PREMIUM
+  LUXURY
+}
+
+// ---------- Models ----------
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  fullName String
+  phone    String?
+
+  profileImage String?
+
+  // Style profile used for recommendations (all optional — set during onboarding)
+  skinTone        SkinTone?
+  height          Float? // cm
+  weight          Float? // kg
+  bodyType        BodyType?
+  preferredStyle  FashionStyle?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
+  wishlistItems WishlistItem[]
+  cartItems     CartItem[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Category {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  slug     String  @unique
+  imageUrl String?
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String
+
+  price         Decimal @db.Decimal(10, 2)
+  discountPrice Decimal? @db.Decimal(10, 2)
+
+  images String[]
+  sizes  String[]
+  colors String[]
+  stock  Int      @default(0)
+
+  gender Gender @default(UNISEX)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  // Recommendation-matching attributes
+  suitableBodyTypes BodyType[]
+  suitableSkinTones SkinTone[]
+  styleTags         FashionStyle[]
+  occasionTags      Occasion[]
+  budgetTier        BudgetTier
+
+  isFeatured   Boolean @default(false)
+  isNewArrival Boolean @default(false)
+  isBestSeller Boolean @default(false)
+
+  wishlistedBy WishlistItem[]
+  cartItems    CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@map("products")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  size      String?
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId, size, color])
+  @@map("cart_items")
 }
