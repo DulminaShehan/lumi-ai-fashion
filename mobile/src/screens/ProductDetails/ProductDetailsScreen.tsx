@@ -11,25 +11,45 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, radii, spacing, typography } from '@/theme';
-import { Button, IconButton } from '@/components/ui';
-import { getProductById } from '@/data/mockProducts';
+import { Button, EmptyState, IconButton } from '@/components/ui';
 import { useWishlist } from '@/store/WishlistContext';
 import { useCart } from '@/store/CartContext';
 import { RootScreenProps } from '@/navigation/types';
+import { Product } from '@/types/product';
 
 type Props = RootScreenProps<'ProductDetails'>;
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
+// Stub until the Products API exists — swap this for a real lookup/fetch by id.
+function resolveProduct(_productId: string): Product | undefined {
+  return undefined;
+}
+
 export function ProductDetailsScreen({ route, navigation }: Props) {
-  const product = getProductById(route.params.productId);
+  const product = resolveProduct(route.params.productId);
   const { isWishlisted, toggleWishlist } = useWishlist();
   const { addToCart } = useCart();
 
   const [selectedSize, setSelectedSize] = useState(product?.sizes[0]);
   const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
 
-  if (!product) return null;
+  if (!product) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.notFoundHeader}>
+          <IconButton name="arrow-left" onPress={() => navigation.goBack()} />
+        </View>
+        <EmptyState
+          icon="alert-circle"
+          title="Product unavailable"
+          message="This product isn't available yet."
+          actionLabel="Go Back"
+          onPressAction={() => navigation.goBack()}
+        />
+      </SafeAreaView>
+    );
+  }
 
   const hasDiscount = product.discountPrice != null;
 
@@ -129,6 +149,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  notFoundHeader: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.sm,
   },
   gallery: {
     height: SCREEN_WIDTH * 1.25,

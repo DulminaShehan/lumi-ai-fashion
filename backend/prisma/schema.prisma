@@ -65,14 +65,30 @@ enum BudgetTier {
   LUXURY
 }
 
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
 // ---------- Models ----------
 
 model User {
-  id       String  @id @default(cuid())
-  email    String  @unique
+  id       String   @id @default(cuid())
+  email    String   @unique
   password String
   fullName String
   phone    String?
+  role     UserRole @default(CUSTOMER)
 
   profileImage String?
 
@@ -89,6 +105,7 @@ model User {
   refreshTokens RefreshToken[]
   wishlistItems WishlistItem[]
   cartItems     CartItem[]
+  orders        Order[]
 
   @@map("users")
 }
@@ -152,6 +169,7 @@ model Product {
 
   wishlistedBy WishlistItem[]
   cartItems    CartItem[]
+  orderItems   OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -186,4 +204,54 @@ model CartItem {
 
   @@unique([userId, productId, size, color])
   @@map("cart_items")
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  status      OrderStatus @default(PENDING)
+
+  items OrderItem[]
+
+  subtotal    Decimal @db.Decimal(10, 2)
+  shippingFee Decimal @db.Decimal(10, 2) @default(0)
+  total       Decimal @db.Decimal(10, 2)
+
+  shippingName       String
+  shippingPhone      String
+  shippingAddressLine String
+  shippingCity       String
+  shippingPostalCode String
+  shippingCountry    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  // Snapshots at time of purchase — order history must stay accurate even if the product changes later.
+  productName  String
+  productImage String
+  unitPrice    Decimal @db.Decimal(10, 2)
+
+  size     String
+  color    String
+  quantity Int
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@map("order_items")
 }

@@ -1,0 +1,21 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-xxxl) var(--space-xl);
+  color: var(--color-text-muted);
+  gap: var(--space-sm);
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.message {
+  font-size: 13px;
+  max-width: 320px;
+}

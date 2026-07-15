@@ -1,77 +1,46 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, radii, spacing, typography } from '@/theme';
-import { ProductCard, ScreenHeader, SectionHeader } from '@/components/ui';
-import { getBestSellers, getFeaturedProducts, getNewArrivals } from '@/data/mockProducts';
-import { useWishlist } from '@/store/WishlistContext';
+import { ScreenHeader, SectionHeader } from '@/components/ui';
 import { TabScreenProps } from '@/navigation/types';
-import { Product } from '@/types/product';
 
 type Props = TabScreenProps<'Home'>;
 
-const CARD_WIDTH = 180;
-
 export function HomeScreen({ navigation }: Props) {
-  const { isWishlisted, toggleWishlist } = useWishlist();
-
-  const openProduct = (product: Product) => {
-    navigation.navigate('ProductDetails', { productId: product.id });
-  };
-
-  const renderRow = (products: Product[]) => (
-    <FlatList
-      data={products}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={styles.rowContent}
-      ItemSeparatorComponent={() => <View style={{ width: spacing.lg }} />}
-      renderItem={({ item }) => (
-        <ProductCard
-          product={item}
-          width={CARD_WIDTH}
-          wishlisted={isWishlisted(item.id)}
-          onPress={() => openProduct(item)}
-          onToggleWishlist={() => toggleWishlist(item.id)}
-        />
-      )}
-    />
-  );
-
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ScreenHeader onPressSearch={() => {}} onPressBag={() => navigation.navigate('Cart')} />
 
         <View style={styles.hero}>
-          <Image
-            source={{ uri: 'https://picsum.photos/seed/lumi-hero/1200/1500' }}
-            style={styles.heroImage}
-            resizeMode="cover"
-          />
-          <View style={styles.heroOverlay} />
-          <View style={styles.heroContent}>
-            <Text style={styles.heroEyebrow}>The New Season Edit</Text>
-            <Text style={styles.heroTitle}>Dress your{'\n'}best self</Text>
-          </View>
+          <Text style={styles.heroEyebrow}>The New Season Edit</Text>
+          <Text style={styles.heroTitle}>Dress your{'\n'}best self</Text>
         </View>
 
         <View style={styles.section}>
           <SectionHeader title="Featured" />
-          {renderRow(getFeaturedProducts())}
+          <ProductRowPlaceholder />
         </View>
 
         <View style={styles.section}>
           <SectionHeader title="New Arrivals" />
-          {renderRow(getNewArrivals())}
+          <ProductRowPlaceholder />
         </View>
 
         <View style={styles.section}>
           <SectionHeader title="Best Sellers" />
-          {renderRow(getBestSellers())}
+          <ProductRowPlaceholder />
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function ProductRowPlaceholder() {
+  return (
+    <View style={styles.placeholderRow}>
+      <Text style={styles.placeholderText}>New arrivals are on their way.</Text>
+    </View>
   );
 }
 
@@ -85,20 +54,10 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     marginBottom: spacing.xxxl,
     borderRadius: radii.lg,
-    overflow: 'hidden',
-    height: 420,
-  },
-  heroImage: {
-    ...StyleSheet.absoluteFill,
-  },
-  heroOverlay: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: colors.overlay,
-  },
-  heroContent: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    backgroundColor: colors.black,
     padding: spacing.xxl,
+    justifyContent: 'flex-end',
+    height: 280,
   },
   heroEyebrow: {
     ...typography.label,
@@ -113,7 +72,18 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: spacing.xxxl,
   },
-  rowContent: {
-    paddingHorizontal: spacing.xl,
+  placeholderRow: {
+    marginHorizontal: spacing.xl,
+    height: 140,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  placeholderText: {
+    ...typography.bodySmall,
+    color: colors.textMuted,
   },
 });

@@ -2,17 +2,18 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, spacing, typography } from '@/theme';
 import { EmptyState, ProductCard } from '@/components/ui';
-import { mockProducts } from '@/data/mockProducts';
 import { useWishlist } from '@/store/WishlistContext';
 import { TabScreenProps } from '@/navigation/types';
+import { Product } from '@/types/product';
 
 type Props = TabScreenProps<'Wishlist'>;
 
 const CARD_WIDTH = 168;
 
 export function WishlistScreen({ navigation }: Props) {
-  const { wishlistIds, isWishlisted, toggleWishlist } = useWishlist();
-  const products = mockProducts.filter((product) => wishlistIds.includes(product.id));
+  const { isWishlisted, toggleWishlist } = useWishlist();
+  // No products API is wired up yet, so wishlisted ids can't be resolved to product data.
+  const products: Product[] = [];
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>

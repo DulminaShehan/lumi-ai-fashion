@@ -1,0 +1,28 @@
+.toolbar {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.toolbar > * {
+  min-width: 200px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.nameCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.nameLabel {
+  font-weight: 600;
+}

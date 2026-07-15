@@ -1,0 +1,54 @@
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.base:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.base:not(:disabled):hover {
+  opacity: 0.85;
+}
+
+.md {
+  padding: 10px 20px;
+}
+
+.sm {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+
+.primary {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.secondary {
+  background: var(--color-white);
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-black);
+}
+
+.danger {
+  background: var(--color-error);
+  color: var(--color-white);
+}
