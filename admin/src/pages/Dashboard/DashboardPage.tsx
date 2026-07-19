@@ -23,7 +23,7 @@ export function DashboardPage() {
 
   const stats = [
     { label: 'Products', value: productsQuery.data?.meta.total, to: '/products' },
-    { label: 'Categories', value: categoriesQuery.data?.data.length, to: '/categories' },
+    { label: 'Categories', value: categoriesQuery.data?.data.length, to: '/settings' },
     { label: 'Orders', value: ordersQuery.data?.meta.total, to: '/orders' },
     { label: 'Pending Orders', value: pendingOrdersQuery.data?.meta.total, to: '/orders?status=PENDING' },
   ];

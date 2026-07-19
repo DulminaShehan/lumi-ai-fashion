@@ -5,6 +5,7 @@ export interface AdminUser {
   email: string;
   fullName: string;
   role: UserRole;
+  createdAt: string;
 }
 
 export type Gender = 'MEN' | 'WOMEN' | 'UNISEX';

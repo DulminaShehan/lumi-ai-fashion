@@ -1,0 +1,38 @@
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.sectionSubtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.formCard {
+  margin-bottom: var(--space-xxl);
+}
+
+.formRow {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: flex-end;
+}
+
+.formRow > * {
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.nameCell {
+  display: flex;
+  flex-direction: column;
+}

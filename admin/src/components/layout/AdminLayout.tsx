@@ -4,8 +4,8 @@ import styles from './AdminLayout.module.css';
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', end: true },
   { to: '/products', label: 'Products' },
-  { to: '/categories', label: 'Categories' },
   { to: '/orders', label: 'Orders' },
+  { to: '/settings', label: 'Settings' },
 ];
 
 export function AdminLayout() {

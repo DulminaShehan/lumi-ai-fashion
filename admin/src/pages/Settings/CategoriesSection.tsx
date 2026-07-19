@@ -3,12 +3,12 @@ import type { FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { categoriesApi } from '@/lib/api/categories';
 import { ApiRequestError } from '@/lib/apiClient';
-import { Button, Card, EmptyState, Field, Input, PageHeader } from '@/components/ui';
+import { Button, Card, EmptyState, Field, Input } from '@/components/ui';
 import { CenteredSpinner } from '@/components/ui/Spinner';
 import type { Category } from '@/types';
-import styles from './CategoriesPage.module.css';
+import styles from './CategoriesSection.module.css';
 
-export function CategoriesPage() {
+export function CategoriesSection() {
   const queryClient = useQueryClient();
   const categoriesQuery = useQuery({ queryKey: ['categories'], queryFn: () => categoriesApi.list() });
 
@@ -76,15 +76,13 @@ export function CategoriesPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Categories"
-        subtitle="Organize products into shoppable categories"
-        action={
-          !showForm && (
-            <Button onClick={() => setShowForm(true)}>Add Category</Button>
-          )
-        }
-      />
+      <div className={styles.sectionHeader}>
+        <div>
+          <h2 style={{ fontSize: 17 }}>Categories</h2>
+          <p className={styles.sectionSubtitle}>Organize products into shoppable categories</p>
+        </div>
+        {!showForm && <Button onClick={() => setShowForm(true)}>Add Category</Button>}
+      </div>
 
       {showForm && (
         <Card className={styles.formCard}>

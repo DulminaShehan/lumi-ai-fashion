@@ -7,6 +7,7 @@ import { authRoutes } from './modules/auth/auth.routes';
 import { categoryRoutes } from './modules/categories/category.routes';
 import { productRoutes } from './modules/products/product.routes';
 import { orderRoutes } from './modules/orders/order.routes';
+import { adminRoutes } from './modules/admins/admin.routes';
 
 export function createApp() {
   const app = express();
@@ -27,6 +28,7 @@ export function createApp() {
   app.use('/api/categories', categoryRoutes);
   app.use('/api/products', productRoutes);
   app.use('/api/orders', orderRoutes);
+  app.use('/api/admins', adminRoutes);
 
   app.use(notFoundMiddleware);
   app.use(errorMiddleware);

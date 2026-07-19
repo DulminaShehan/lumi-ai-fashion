@@ -4,7 +4,7 @@ import { DashboardPage } from '@/pages/Dashboard/DashboardPage';
 import { ProductsListPage } from '@/pages/Products/ProductsListPage';
 import { ProductFormPage } from '@/pages/Products/ProductFormPage';
 import { ProductDetailPage } from '@/pages/Products/ProductDetailPage';
-import { CategoriesPage } from '@/pages/Categories/CategoriesPage';
+import { SettingsPage } from '@/pages/Settings/SettingsPage';
 import { OrdersListPage } from '@/pages/Orders/OrdersListPage';
 import { OrderDetailPage } from '@/pages/Orders/OrderDetailPage';
 
@@ -17,7 +17,7 @@ function App() {
         <Route path="/products/new" element={<ProductFormPage />} />
         <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/products/:id/edit" element={<ProductFormPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/orders" element={<OrdersListPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
       </Route>
